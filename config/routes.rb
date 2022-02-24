@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :terminals
   resources :cities
   resources :home, only: [:index]
   root to: 'home#index'

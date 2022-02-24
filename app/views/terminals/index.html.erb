@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Terminals</h1>
+
+<div id="terminals">
+  <% @terminals.each do |terminal| %>
+    <%= render terminal %>
+    <p>
+      <%= link_to "Show this terminal", terminal %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New terminal", new_terminal_path %>
