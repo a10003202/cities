@@ -12,16 +12,16 @@
   <% end %>
 
   <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :code, style: "display: block" %>
-    <%= form.text_field :code %>
+    <%= form.label :code, class: 'form-label' %>
+    <%= form.text_field :code, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

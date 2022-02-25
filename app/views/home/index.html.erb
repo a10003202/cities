@@ -1,5 +1,9 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<h1>Welcome</h1>
+<p>Dashboard</p>
 
-<%= link_to "Cities", cities_path %>
-<%= link_to "Terminals", terminals_path %>
+<% if can? :read, :city %>
+    <%= link_to "Cities", cities_path, class: 'btn btn-success' %>
+<% end %>
+<% if can? :read, :terminal %>
+    <%= link_to "Terminals", terminals_path, class: 'btn btn-success' %>
+<% end %>

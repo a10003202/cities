@@ -12,31 +12,31 @@
   <% end %>
 
   <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+    <%= form.label :name, class: 'form-label'%>
+    <%= form.text_field :name, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :code, style: "display: block" %>
-    <%= form.text_field :code %>
+    <%= form.label :code, class: 'form-label'%>
+    <%= form.text_field :code, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :latitude, style: "display: block" %>
-    <%= form.text_field :latitude %>
+    <%= form.label :latitude, class: 'form-label'%>
+    <%= form.text_field :latitude, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :longitude, style: "display: block" %>
-    <%= form.text_field :longitude %>
+    <%= form.label :longitude, class: 'form-label'%>
+    <%= form.text_field :longitude, class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :city_id, style: "display: block" %>
-    <%= form.collection_select(:city_id, City.all, :id, :name) %>
+    <%= form.label :city_id, class: 'form-label'%>
+    <%= form.collection_select(:city_id, City.all, :id, :name, {:prompt=>true}, {:class=>'form-control'}) %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary' %>
   </div>
 <% end %>

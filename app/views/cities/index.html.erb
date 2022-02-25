@@ -2,29 +2,28 @@
 
 <h1>Cities</h1>
 
+<%= link_to "New city", new_city_path, class: 'btn btn-success float-end' %>
 <div id="cities">
-  <table>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Code</th>
-    <th>Actions</th>
-  <tr>
-  </thead>
-  <tbody>
-    <% @cities.each do |city| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= city.name %></td>
-        <td><%= city.code %></td>
-        <td>
-          <p>
-            <%= link_to "Show this city", city %>
-          </p>
-        </td>
-      </tr>
-    <% end %>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Actions</th>
+      <tr>
+    </thead>
+    <tbody>
+      <% @cities.each do |city| %>
+        <tr>
+          <td><%= city.name %></td>
+          <td><%= city.code %></td>
+          <td>
+            <% if can? :read, :city %>
+              <%= link_to "Show this city", city, class: '' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>
-
-<%= link_to "New city", new_city_path %>

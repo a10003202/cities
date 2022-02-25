@@ -1,14 +1,19 @@
 <p style="color: green"><%= notice %></p>
 
 <h1>Terminals</h1>
-
+<%= link_to "New terminal", new_terminal_path, class: 'btn btn-success float-end' %>
 <div id="terminals">
-  <% @terminals.each do |terminal| %>
-    <%= render terminal %>
-    <p>
-      <%= link_to "Show this terminal", terminal %>
-    </p>
-  <% end %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Code</th>
+        <th>City</th>
+        <th>Actions</th>
+      <tr>
+    </thead>
+    <tbody>
+      <%= render @terminals %>
+    </tbody>
+  </table>
 </div>
-
-<%= link_to "New terminal", new_terminal_path %>

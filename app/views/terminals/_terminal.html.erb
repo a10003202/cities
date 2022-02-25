@@ -1,27 +1,10 @@
-<div id="<%= dom_id terminal %>">
-  <p>
-    <strong>Name:</strong>
-    <%= terminal.name %>
-  </p>
-
-  <p>
-    <strong>Code:</strong>
-    <%= terminal.code %>
-  </p>
-
-  <p>
-    <strong>Latitude:</strong>
-    <%= terminal.latitude %>
-  </p>
-
-  <p>
-    <strong>Longitude:</strong>
-    <%= terminal.longitude %>
-  </p>
-
-  <p>
-    <strong>City:</strong>
-    <%= terminal.city.name %>
-  </p>
-
-</div>
+<tr>
+  <td><%= terminal.name %></td>
+  <td><%= terminal.code %></td>
+  <td><%= terminal.city_name %></td>
+  <td>
+    <p>
+      <%= link_to "Show this terminal", terminal %>
+    </p>
+  </td>
+</tr>
