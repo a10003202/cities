@@ -50,7 +50,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         run: |
-          rake db:create setup:reset
+          rake db:create db:migrate
       - name: Run tests
         env:
           PGHOST: localhost
