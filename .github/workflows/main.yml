@@ -61,6 +61,7 @@ jobs:
           RAILS_ENV: test
         run: bundle exec rspec
       - name: Add Coverage
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: Nef10/lcov-reporter-action@v0.3.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ env.pr_number }}
