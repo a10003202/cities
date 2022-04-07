@@ -24,7 +24,8 @@ SimpleCov::Formatter::LcovFormatter.config do |config|
 end
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter, 
+  SimpleCov::Formatter::SimpleFormatter,
+  SimpleCov::Formatter::HTMLFormatter,
   #Simple Cov in formatter::Formatter::Add Lcov Formatter
   SimpleCov::Formatter::LcovFormatter
 ])
