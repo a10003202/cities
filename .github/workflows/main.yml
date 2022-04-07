@@ -72,7 +72,7 @@ jobs:
         shell: bash
         run: |
           value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
-          echo jq coverage/coverage.json
+          jq coverage/coverage.json
           echo "::set-output name=coverage::$value"
           echo $value
       - if: github.event_name == 'pull_request'
