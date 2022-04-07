@@ -60,15 +60,15 @@ jobs:
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bundle exec rspec
-      - name: Print the Total Coverage
+      - name: Print the Total Coverage Json
         id: coverage-percent
         shell: bash
         run: |
-          value=`sed -n 26p coverage/index.html`
+          value=`jq .metrics.covered_percent coverage/coverage.json`
           echo "::set-output name=coverage::$value"
           echo $value
       - name: Add Coverage Label
-        uses: actions/github-script@v2
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
