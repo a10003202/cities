@@ -64,7 +64,7 @@ jobs:
         id: coverage-percent
         shell: bash
         run: |
-          value=`jq .metrics.covered_percent coverage/coverage.json`
+          value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
           echo "::set-output name=coverage::$value"
           echo $value
       - name: Add Coverage Label
@@ -73,7 +73,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             console.log('${{steps.coverage-percent.outputs.coverage}}')
-            github.issues.setLabels({
+            github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
