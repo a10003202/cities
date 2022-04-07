@@ -1,5 +1,5 @@
 name: Rails tests
-on: [push, pull_request]
+on: [push]
 
 jobs:
   verify:
@@ -64,7 +64,7 @@ jobs:
         id: coverage-percent
         shell: bash
         run: |
-          value=`sed -n 26p coverage/index.html | awk -F '%' '{print $1}'`
+          value=`sed -n 26p coverage/index.html`
           echo "::set-output name=coverage::$value"
           echo $value
       - name: Add Coverage Label
