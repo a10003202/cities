@@ -72,6 +72,7 @@ jobs:
         shell: bash
         run: |
           value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
+          echo "jq .metrics.covered_percent coverage/coverage.json"
           echo "::set-output name=coverage::$value"
           echo $value
       - if: github.event_name == 'pull_request'
@@ -108,7 +109,8 @@ jobs:
               repo: context.repo.repo,
               labels: [newLabel]
             })
-      - name: Add Coverage Report
+      - if: github.event_name == 'pull_request'
+        name: Add Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
