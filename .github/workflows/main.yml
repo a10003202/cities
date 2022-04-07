@@ -61,7 +61,7 @@ jobs:
           RAILS_ENV: test
         run: bundle exec rspec
       - name: Add Coverage
-        uses: Nef10/lcov-reporter-action@v0.3.0
+        uses: barecheck/code-coverage-action@v0.6.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pr_number: ${{ env.pr_number }}
+          lcov-file: "./coverage/lcov.info"
