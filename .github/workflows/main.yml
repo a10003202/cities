@@ -71,7 +71,7 @@ jobs:
         id: coverage-percent-json
         shell: bash
         run: |
-          value=`jq .metrics.covered_percent coverage/coverage.json | printf '%.2f\n' '{printf $1}'`
+          value=`jq .metrics.covered_percent coverage/coverage.json | printf '%.2f\n' '{print $1}'`
           echo "::set-output name=coverage::$value"
           echo $value
       - name: Add Coverage Label
