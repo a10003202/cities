@@ -88,7 +88,8 @@ end
 
 group :test do
   gem 'webmock'
-  gem 'simplecov'
-  gem 'simplecov-lcov'
+  gem 'simplecov', require: false
+  gem 'simplecov-lcov', require: false
+  gem 'simplecov-json', require: false
 end
 

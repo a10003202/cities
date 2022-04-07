@@ -16,6 +16,7 @@
 require 'webmock/rspec'
 require 'simplecov'
 require 'simplecov-lcov'
+require 'simplecov-json'
 
 SimpleCov::Formatter::LcovFormatter.config do |config|
   #Coveralls is coverage by default/lcov.Send info results
@@ -26,6 +27,7 @@ end
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::SimpleFormatter,
   SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::JSONFormatter,
   #Simple Cov in formatter::Formatter::Add Lcov Formatter
   SimpleCov::Formatter::LcovFormatter
 ])

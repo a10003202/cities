@@ -67,6 +67,13 @@ jobs:
           value=`sed -n 26p coverage/index.html | awk -F '%' '{print $1}'`
           echo "::set-output name=coverage::$value"
           echo $value
+      - name: Print the Total Coverage Json
+        id: coverage-percent-json
+        shell: bash
+        run: |
+          value=`jq .metrics.covered_percent coverage/coverage.json | printf '%.2f\n' '{printf $1}'`
+          echo "::set-output name=coverage::$value"
+          echo $value
       - name: Add Coverage Label
         uses: actions/github-script@v2
         with:
@@ -76,7 +83,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['COV: ${{steps.coverage-percent.outputs.coverage}}']
+              labels: ['COV: ${{steps.coverage-percent-json.outputs.coverage}}']
             })
       - name: Add Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
