@@ -1,5 +1,5 @@
 name: Rails tests
-on: [push]
+on: [push, pull_request]
 
 jobs:
   verify:
@@ -74,7 +74,8 @@ jobs:
           value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
           echo "::set-output name=coverage::$value"
           echo $value
-      - name: Add Coverage Label
+      - if: github.event_name == 'pull_request'
+        name: Add Coverage Label
         uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
