@@ -71,8 +71,7 @@ jobs:
         id: coverage-percent
         shell: bash
         run: |
-          value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
-          jq .metrics coverage/coverage.json
+          value=`jq .metrics coverage/coverage.json`
           echo "::set-output name=coverage::$value"
           echo $value
       - if: github.event_name == 'pull_request'
