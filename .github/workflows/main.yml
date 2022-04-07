@@ -60,8 +60,7 @@ jobs:
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bundle exec rspec
-      - name: Add Coverage
-        uses: barecheck/code-coverage-action@v0.6.1
+      - name: Add Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: "./coverage/lcov.info"
