@@ -60,6 +60,13 @@ jobs:
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bundle exec rspec
+      #- name: Print the Total Coverage
+      #  id: coverage-percent
+      #  shell: bash
+      #  run: |
+      #    value=`sed -n 26p coverage/index.html | awk -F '%' '{print $1}'`
+      #    echo "::set-output name=coverage::$value"
+      #    echo $value
       - name: Print the Total Coverage Json
         id: coverage-percent
         shell: bash
@@ -68,16 +75,37 @@ jobs:
           echo "::set-output name=coverage::$value"
           echo $value
       - name: Add Coverage Label
-        uses: actions/github-script@v6
+        uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            console.log('${{steps.coverage-percent.outputs.coverage}}')
-            github.rest.issues.addLabels({
+            let newLabel = 'COV: ${{steps.coverage-percent.outputs.coverage}}'
+            const labels = await github.issues.listLabelsOnIssue({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            console.log(labels.data)
+            let covLabel = null
+            labels.data.forEach(label => {
+              if (label.name.match(/COV:/)) {
+                covLabel = label
+              }
+            })
+            if (covLabel && covLabel.name === newLabel) {
+              covLabel = null
+            }
+            covLabel && github.issues.removeLabel({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['COV: ${{steps.coverage-percent.outputs.coverage}}']
+              name: covLabel.name,
+            })
+            newLabel && github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: [newLabel]
             })
       - name: Add Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
