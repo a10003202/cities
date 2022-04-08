@@ -59,9 +59,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
-        run: |
-          rm coverage/coverage.json
-          bundle exec rspec
+        run: bundle exec rspec
       #- name: Print the Total Coverage
       #  id: coverage-percent
       #  shell: bash
