@@ -3,6 +3,7 @@ module ControllerMacros
     # Before each test, create and login the user
     before(:each) do
       user = User.create({email: 'user@email.com', password: '123456'})
+      user.add_role 'admin'
       # user.confirm! # Or set a confirmed_at inside the factory. Only necessary if you are using the "confirmable" module
       sign_in user
     end

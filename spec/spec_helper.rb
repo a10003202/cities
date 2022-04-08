@@ -33,6 +33,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
 ])
 
 SimpleCov.start('rails') do
+  minimum_coverage 50
   maximum_coverage_drop 2
 end
 WebMock.disable_net_connect!(allow_localhost: true)
