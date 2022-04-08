@@ -2,7 +2,7 @@ name: Rails tests
 on: [push, pull_request]
 
 jobs:
-  verify:
+  build:
     name: Build
     runs-on: ubuntu-latest
     services:
@@ -60,6 +60,12 @@ jobs:
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: bundle exec rspec
+  coverage:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
       #- name: Print the Total Coverage
       #  id: coverage-percent
       #  shell: bash
@@ -74,8 +80,7 @@ jobs:
           value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
           echo "::set-output name=coverage::$value"
           echo $value
-      - if: github.event_name == 'pull_request'
-        name: Add Coverage Label
+      - name: Add Coverage Label
         uses: actions/github-script@v2
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -108,8 +113,7 @@ jobs:
               repo: context.repo.repo,
               labels: [newLabel]
             })
-      - if: github.event_name == 'pull_request'
-        name: Add Coverage Report
+      - name: Add Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
