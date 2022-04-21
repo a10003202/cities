@@ -1,0 +1,120 @@
+name: Rails tests
+on: [push, pull_request]
+
+jobs:
+  verify:
+    name: Build
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        # Docker Hub image
+        image: redis
+        ports:
+        - 6379:6379
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
+      - name: Install dependencies
+        run: |
+          sudo apt-get install libpq-dev
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+          yarn install
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          POSTGRES_DB: cities_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        run: |
+          rake db:create db:migrate
+      - name: Run tests
+        env:
+          PGHOST: localhost
+          POSTGRES_DB: payments_app_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
+        run: bundle exec rspec
+      #- name: Print the Total Coverage
+      #  id: coverage-percent
+      #  shell: bash
+      #  run: |
+      #    value=`sed -n 26p coverage/index.html | awk -F '%' '{print $1}'`
+      #    echo "::set-output name=coverage::$value"
+      #    echo $value
+      - name: Print the Total Coverage Json
+        id: coverage-percent
+        shell: bash
+        run: |
+          value=`jq .metrics.covered_percent coverage/coverage.json | xargs printf '%.2f\n'`
+          echo "::set-output name=coverage::$value"
+          echo $value
+      - if: github.event_name == 'pull_request'
+        name: Add Coverage Label
+        uses: actions/github-script@v2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            let newLabel = 'COV: ${{steps.coverage-percent.outputs.coverage}}'
+            const labels = await github.issues.listLabelsOnIssue({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+            console.log(labels.data)
+            let covLabel = null
+            labels.data.forEach(label => {
+              if (label.name.match(/COV:/)) {
+                covLabel = label
+              }
+            })
+            if (covLabel && covLabel.name === newLabel) {
+              covLabel = null
+            }
+            covLabel && github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: covLabel.name,
+            })
+            covLabel && github.issues.deleteLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: covLabel.name,
+            })
+            newLabel && github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: [newLabel]
+            })
+      - if: github.event_name == 'pull_request'
+        name: Add Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
