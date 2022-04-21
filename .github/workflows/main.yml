@@ -102,6 +102,11 @@ jobs:
               repo: context.repo.repo,
               name: covLabel.name,
             })
+            covLabel && github.issues.deleteLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: covLabel.name,
+            })
             newLabel && github.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
